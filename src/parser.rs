@@ -12,7 +12,6 @@ pub enum Syntax {
     LoopEnd,
 }
 
-
 #[derive(Clone)]
 pub enum Exec {
     IPtr,
@@ -23,7 +22,6 @@ pub enum Exec {
     Read,
     LoopBody(Vec<Exec>),
 }
-
 
 pub fn lexer(src: &String) -> Vec<Syntax> {
     let mut seq: Vec<Syntax> = Vec::new();
@@ -42,13 +40,12 @@ pub fn lexer(src: &String) -> Vec<Syntax> {
 
         match oper {
             Some(s) => seq.push(s),
-            None => ()
+            None => (),
         }
     }
 
     return seq;
 }
-
 
 pub fn parse(source: Vec<Syntax>) -> Vec<Exec> {
     let mut opcode: Vec<Exec> = Vec::new();
@@ -68,7 +65,7 @@ pub fn parse(source: Vec<Syntax>) -> Vec<Exec> {
                     loop_start = i;
                     loop_count += 1;
                     None
-                },
+                }
                 Syntax::LoopEnd => process::exit(1),
             };
 
@@ -80,13 +77,13 @@ pub fn parse(source: Vec<Syntax>) -> Vec<Exec> {
             match ins {
                 Syntax::LoopBegin => {
                     loop_count += 1;
-                },
+                }
                 Syntax::LoopEnd => {
                     loop_count -= 1;
                     if loop_count == 0 {
-                        opcode.push(Exec::LoopBody(parse(source[loop_start+1..i].to_vec())));
+                        opcode.push(Exec::LoopBody(parse(source[loop_start + 1..i].to_vec())));
                     }
-                },
+                }
                 _ => (),
             }
         }
