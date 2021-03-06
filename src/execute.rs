@@ -1,7 +1,7 @@
 use crate::parser::Exec;
 use std::io;
 
-pub fn run(instructs: &Vec<Exec>, system: &mut Vec<u8>, cell: &mut usize) -> Vec<char> {
+pub fn run(instructs: &Vec<Exec>, system: &mut Vec<u32>, cell: &mut usize) -> Vec<char> {
     let mut stdout: Vec<char> = Vec::new();
     for sym_i in 0..instructs.len() {
         match &instructs[sym_i] {
@@ -19,7 +19,7 @@ pub fn run(instructs: &Vec<Exec>, system: &mut Vec<u8>, cell: &mut usize) -> Vec
             Exec::Increment => system[*cell] += 1,
             Exec::Decrement => system[*cell] -= 1,
             Exec::Write => {
-                stdout.push(system[*cell] as char);
+                stdout.push(system[*cell] as u8 as char);
             }
 
             Exec::Read => {
@@ -27,7 +27,7 @@ pub fn run(instructs: &Vec<Exec>, system: &mut Vec<u8>, cell: &mut usize) -> Vec
                 io::stdin()
                     .read_line(&mut raw_inp)
                     .expect("failed to read input");
-                system[*cell] = raw_inp.trim().parse::<u8>().unwrap();
+                system[*cell] = raw_inp.trim().parse::<u32>().unwrap();
             }
             Exec::LoopBody(lp) => {
                 while system[*cell] != 0 {
